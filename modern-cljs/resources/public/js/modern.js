@@ -30741,4 +30741,4 @@ goog.provide("modern_cljs.connect");
 goog.require("cljs.core");
 goog.require("clojure.browser.repl");
 goog.require("clojure.browser.repl");
-repl.connect.call(null, "http:localhost:9000/repl");
+clojure.browser.repl.connect.call(null, "http://localhost:9000/repl");
