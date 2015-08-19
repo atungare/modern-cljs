@@ -9,24 +9,49 @@
                  [domina "1.0.3"]]
 
   ;; CLJ and CLJS source code path
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/clj" "src/cljs" "src/brepl"]
 
   ;; lein-cljsbuild
   :plugins [[lein-cljsbuild "1.0.0"]
             [lein-ring "0.8.8"]]
 
   :cljsbuild {:builds
-              [{;; CLJS source paths
+              {:dev
+               {;; CLJS source paths
+                :source-paths ["src/cljs" "src/brepl"]
+
+                ;; Google Closure (CLS) options
+                :compiler {;; js path
+                           :output-to "resources/public/js/modern_dbg.js"
+
+                           ;; minimal optimizations
+                           :optimizations :whitespace
+
+                           :pretty-print true}}
+               :pre-prod
+               {;; CLJS source paths
+                :source-paths ["src/cljs" "src/brepl"]
+
+                ;; Google Closure (CLS) options
+                :compiler {;; js path
+                           :output-to "resources/public/js/modern_pre.js"
+
+                           ;; minification
+                           :optimizations :simple
+
+                           :pretty-print false}}
+               :prod
+               {;; CLJS source paths
                 :source-paths ["src/cljs"]
 
                 ;; Google Closure (CLS) options
                 :compiler {;; js path
                            :output-to "resources/public/js/modern.js"
 
-                           ;; minimal optimizations
-                           :optimizations :whitespace
+                           ;; killing of unused code
+                           :optimizations :advanced
 
-                           :pretty-print true}}]}
+                           :pretty-print false}}}}
 
   :ring {:handler modern-cljs.core/handler})
 
