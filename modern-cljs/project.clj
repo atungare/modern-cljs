@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/clojurescript "0.0-2069"]
                  [compojure "1.1.6"]
-                 [domina "1.0.3"]]
+                 [domina "1.0.3"]
+                 [hiccups "0.2.0"]]
 
   ;; CLJ and CLJS source code path
   :source-paths ["src/clj" "src/cljs" "src/brepl"]
