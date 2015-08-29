@@ -10,6 +10,8 @@
   ;; root
   (GET "/" [] "<p>Hello, World, from Compojure!</p>")
   (POST "/login" [email password] (authenticate-user email password))
+  (POST "/shopping" [quantity price tax discount]
+        (str "You enter: "quantity " " price " " tax " and " discount "."))
   ;; static assets
   (resources "/")
   (not-found "Page not found."))
