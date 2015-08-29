@@ -1,4 +1,6 @@
-(ns modern-cljs.login)
+(ns modern-cljs.login
+  (:require [modern-cljs.login.validators :refer [user-credential-errors]]
+            [modern-cljs.login.java.validators :refer [email-domain-errors]]))
 
 (def ^:dynamic *re-email*
   #"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$")
@@ -9,11 +11,10 @@
 (declare validate-email validate-password)
 
 (defn authenticate-user [email password]
-  (if (or (empty? email) (empty? password))
+  (if (or (boolean (user-credential-errors email password))
+          (boolean (email-domain-errors email)))
     (str "Please complete the form.")
-    (if (and (validate-email email)
-             (validate-password password))
-      (str email " and " password " validated, still need authentication!"))))
+    (str email " and " password " validated, still need authentication!")))
 
 
 (defn validate-email [email]

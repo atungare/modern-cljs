@@ -1,22 +1,35 @@
 (ns modern-cljs.login
-  (:require-macros [hiccups.core :refer [html]])
+  (:require-macros [hiccups.core :refer [html]]
+                   [shoreleave.remotes.macros :as shore-macros])
   (:require [domina :refer [by-class by-id value append! destroy! attr]]
             [domina.events :refer [listen! prevent-default]]
-            [hiccups.runtime]))
+            [hiccups.runtime]
+            [modern-cljs.login.validators :refer [user-credential-errors]]
+            [shoreleave.remotes.http-rpc :refer [remote-callback]]))
+
+(defn validate-email-domain [email]
+  (remote-callback :email-domain-errors
+                   [email]
+                   #(if %
+                      (do
+                        (append! (by-id "loginForm")
+                                 (html [:div.help.email "The email domain doesn't exist."]))
+                        false)
+                      true)))
 
 (defn validate-email [email]
   (destroy! (by-class "email"))
-  (if (not (re-matches (re-pattern (attr email :pattern)) (value email)))
+  (if-let [errors (:email (user-credential-errors (value email) nil))]
     (do
-      (append! (by-id "loginForm") (html [:div.help.email (attr email :title)]))
+      (append! (by-id "loginForm") (html [:div.help.email (first errors)]))
       false)
-    true))
+    (validate-email-domain (value email))))
 
 (defn validate-password [password]
   (destroy! (by-class "password"))
-  (if (not (re-matches (re-pattern (attr password :pattern)) (value password)))
+  (if-let [errors (:password (user-credential-errors nil (value password)))]
     (do
-      (append! (by-id "loginForm") (html [:div.help.password (attr password :title)]))
+      (append! (by-id "loginForm") (html [:div.help.password (first errors)]))
       false)
     true))
 
