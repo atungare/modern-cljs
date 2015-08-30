@@ -16,14 +16,23 @@
   ;; CLJ and CLJS source code path
   :source-paths ["src/clj" "src/cljs" "src/brepl"]
 
-  :test-paths ["test/clj" "test/cljs"]
+  :test-paths ["target/test/clj" "target/test/cljs"]
 
   ;; lein-cljsbuild
   :plugins [[lein-cljsbuild "1.0.0"]
             [lein-ring "0.8.8"]
-            [com.cemerick/clojurescript.test "0.2.1"]]
+            [com.cemerick/clojurescript.test "0.2.1"]
+            [com.keminglabs/cljx "0.3.0"]]
 
   :hooks [leiningen.cljsbuild]
+
+  :cljx {:builds [{:source-paths ["test/cljx"] ;; cljx source dir
+                   :output-path "target/test/clj" ;; clj output
+                   :rules :clj} ;; clj generation rules
+
+                  {:source-paths ["test/cljx"] ;; cljx source dir
+                   :output-path "target/test/cljs" ;; cljs output
+                   :rules :cljs}]} ;; cljs generation rules
 
   :cljsbuild {:crossovers [valip.core valip.predicates
                            modern-cljs.login.validators
@@ -67,7 +76,7 @@
                            :pretty-print false}}
                :ws-unit-tests
                {;; CLJS source code and unit test paths
-                :source-paths ["src/brepl" "src/cljs" "test/cljs"]
+                :source-paths ["src/brepl" "src/cljs" "target/test/cljs"]
 
                 ;; Google Closure Compiler options
                 :compiler {;; the name of emitted JS script file for unit testing
@@ -80,7 +89,7 @@
 
                :simple-unit-tests
                {;; same path as above
-                :source-paths ["src/brepl" "src/cljs" "test/cljs"]
+                :source-paths ["src/brepl" "src/cljs" "target/test/cljs"]
 
                 :compiler {;; different JS output name for unit testing
                            :output-to "test/js/testable_pre.js"
@@ -93,7 +102,7 @@
 
                :advanced-unit-tests
                {;; same path as above
-                :source-paths ["src/cljs" "test/cljs"]
+                :source-paths ["src/cljs" "target/test/cljs"]
 
                 :compiler {;; different JS output name for unit testing
                            :output-to "test/js/testable.js"

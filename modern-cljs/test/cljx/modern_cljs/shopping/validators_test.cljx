@@ -1,6 +1,12 @@
-(ns modern-cljs.shopping.validators-test
-  (:require [clojure.test :refer [deftest are testing]]
-            [modern-cljs.shopping.validators :refer [validate-shopping-form]]))
+#+clj (ns modern-cljs.shopping.validators-test
+        (:require [clojure.test :refer [deftest are testing]]
+                  [modern-cljs.shopping.validators :refer [validate-shopping-form]]))
+
+#+cljs (ns modern-cljs.shopping.validators-test
+         (:require-macros [cemerick.cljs.test :refer (deftest are testing)])
+         (:require [cemerick.cljs.test :as t]
+                   [modern-cljs.shopping.validators :refer [validate-shopping-form]]))
+
 
 (deftest validate-shopping-form-test
   (testing "shopping form validation"
@@ -10,7 +16,7 @@
            nil (validate-shopping-form "1" "0" "0" "0")
            nil (validate-shopping-form "1" "0.0" "0.0" "0.0")
            nil (validate-shopping-form "100" "100.25" "8.25" "123.45")))
-    
+
     (testing "/ no presence"
       (are [expected actual] (= expected actual)
 
