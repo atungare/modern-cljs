@@ -16,13 +16,17 @@
   ;; CLJ and CLJS source code path
   :source-paths ["src/clj" "src/cljs" "src/brepl"]
 
+  :test-paths ["test/clj"]
+
   ;; lein-cljsbuild
   :plugins [[lein-cljsbuild "1.0.0"]
             [lein-ring "0.8.8"]]
 
   :hooks [leiningen.cljsbuild]
 
-  :cljsbuild {:crossovers [valip.core valip.predicates modern-cljs.login.validators]
+  :cljsbuild {:crossovers [valip.core valip.predicates
+                           modern-cljs.login.validators
+                           modern-cljs.shopping.validators]
               :builds
               {:dev
                {;; CLJS source paths
